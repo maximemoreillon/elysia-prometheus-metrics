@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "module": "index.ts",
   "type": "module",
+  "author": "Maxime MOREILLON",
+  "license": "MIT",
   "devDependencies": {
     "bun-types": "latest"
   },

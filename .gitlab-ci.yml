@@ -7,6 +7,4 @@ publish:
   before_script:
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
   script:
-    - npm i
-    - npm run build
     - npm publish

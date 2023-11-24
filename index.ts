@@ -11,7 +11,10 @@ const metrics: any = {}
 const handleRequestStart = (opts: Opts) => (ctx: any) => {
   ctx.store = { ...ctx.store, startTime: process.hrtime.bigint() }
 
-  const { metricsPath = "/metrics" } = opts
+  const {
+    metricsPath = "/metrics",
+    httpDurationMetricName = "http_request_duration_seconds",
+  } = opts
 
   const {
     request: { url },
@@ -22,7 +25,7 @@ const handleRequestStart = (opts: Opts) => (ctx: any) => {
       .map((k) => `${k} ${metrics[k]}`)
       .join(`\n`)
 
-    return `# HELP http_request_duration_seconds duration histogram of http responses labeled with: status_code, method, path\n# TYPE http_request_duration_seconds histogram\n${formattedMetrics}`
+    return `# HELP ${httpDurationMetricName} duration histogram of http responses labeled with: status_code, method, path\n# TYPE ${httpDurationMetricName} histogram\n${formattedMetrics}`
   }
 }
 
