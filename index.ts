@@ -1,17 +1,18 @@
 import Elysia from "elysia"
 
 interface Opts {
+  httpDurationMetricName: string
+  buckets: number[]
+  metricsPath: string
+}
+
+interface UserOpts {
   httpDurationMetricName?: string
   buckets?: number[]
   metricsPath?: string
 }
 
 const metrics: any = {}
-
-const formatParams = (paramMap: any) =>
-  Object.keys(paramMap)
-    .map((key) => `${key}="${paramMap[key]}"`)
-    .join(",")
 
 // TODO: all error codes
 const codeMap: any = {
@@ -21,27 +22,21 @@ const codeMap: any = {
   INTERNAL_SERVER_ERROR: 500,
 }
 
-const addToMetrics = (metric: string, val: number) => {
-  if (!metrics[metric]) metrics[metric] = val
-  else metrics[metric] += val
-}
+const formatParams = (paramMap: any) =>
+  Object.keys(paramMap)
+    .map((key) => `${key}="${paramMap[key]}"`)
+    .join(",")
 
-const handleRequestStart = (opts: Opts) => (ctx: any) => {
+const handleOnRequest = (opts: Opts) => (ctx: any) => {
   // Keep track of the start time of the request
   ctx.store.startTime = process.hrtime.bigint()
 
-  // TODO:
-  const {
-    metricsPath = "/metrics",
-    httpDurationMetricName = "http_request_duration_seconds",
-  } = opts
-
+  const { metricsPath, httpDurationMetricName } = opts
   const {
     request: { url },
   } = ctx
 
-  const { pathname } = new URL(url)
-  if (pathname === metricsPath) {
+  if (new URL(url).pathname === metricsPath) {
     const formattedMetrics = Object.keys(metrics)
       .map((k) => `${k} ${metrics[k]}`)
       .join(`\n`)
@@ -51,10 +46,7 @@ const handleRequestStart = (opts: Opts) => (ctx: any) => {
 }
 
 const recordMetrics = (opts: Opts) => (ctx: any) => {
-  const {
-    httpDurationMetricName = "http_request_duration_seconds",
-    buckets = [0.003, 0.03, 0.1, 0.3, 1.5, 10],
-  }: Opts = opts
+  const { httpDurationMetricName, buckets } = opts
 
   const {
     store,
@@ -95,17 +87,26 @@ const recordMetrics = (opts: Opts) => (ctx: any) => {
     })
 
   const sumMetric = `${httpDurationMetricName}_sum{${formatParams(paramMap)}}`
+  if (!metrics[sumMetric]) metrics[sumMetric] = latency
+  else metrics[sumMetric] += latency
+
   const countMetric = `${httpDurationMetricName}_count{${formatParams(
     paramMap
   )}}`
-
-  addToMetrics(sumMetric, latency)
-  addToMetrics(countMetric, 1)
+  if (!metrics[countMetric]) metrics[countMetric] = 1
+  else metrics[countMetric] += 1
 }
 
-export default (opts: Opts = {}) =>
-  new Elysia()
-    // .onAfterHandle(handleRequestStart) // Seemingly not needed
-    .onRequest(handleRequestStart(opts))
+export default (userOpts: UserOpts = {}) => {
+  const opts = {
+    metricsPath: "/metrics",
+    httpDurationMetricName: "http_request_duration_seconds",
+    buckets: [0.003, 0.03, 0.1, 0.3, 1.5, 10],
+    ...userOpts,
+  }
+
+  return new Elysia()
+    .onRequest(handleOnRequest(opts))
     .onAfterHandle(recordMetrics(opts))
     .onError(recordMetrics(opts))
+}
