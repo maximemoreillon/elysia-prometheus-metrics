@@ -8,27 +8,6 @@ interface Opts {
 
 const metrics: any = {}
 
-const handleRequestStart = (opts: Opts) => (ctx: any) => {
-  ctx.store = { ...ctx.store, startTime: process.hrtime.bigint() }
-
-  const {
-    metricsPath = "/metrics",
-    httpDurationMetricName = "http_request_duration_seconds",
-  } = opts
-
-  const {
-    request: { url },
-  } = ctx
-  const { pathname } = new URL(url)
-  if (pathname === metricsPath) {
-    const formattedMetrics = Object.keys(metrics)
-      .map((k) => `${k} ${metrics[k]}`)
-      .join(`\n`)
-
-    return `# HELP ${httpDurationMetricName} duration histogram of http responses labeled with: status_code, method, path\n# TYPE ${httpDurationMetricName} histogram\n${formattedMetrics}`
-  }
-}
-
 const formatParams = (paramMap: any) =>
   Object.keys(paramMap)
     .map((key) => `${key}="${paramMap[key]}"`)
@@ -45,6 +24,30 @@ const codeMap: any = {
 const addToMetrics = (metric: string, val: number) => {
   if (!metrics[metric]) metrics[metric] = val
   else metrics[metric] += val
+}
+
+const handleRequestStart = (opts: Opts) => (ctx: any) => {
+  // Keep track of the start time of the request
+  ctx.store.startTime = process.hrtime.bigint()
+
+  // TODO:
+  const {
+    metricsPath = "/metrics",
+    httpDurationMetricName = "http_request_duration_seconds",
+  } = opts
+
+  const {
+    request: { url },
+  } = ctx
+
+  const { pathname } = new URL(url)
+  if (pathname === metricsPath) {
+    const formattedMetrics = Object.keys(metrics)
+      .map((k) => `${k} ${metrics[k]}`)
+      .join(`\n`)
+
+    return `# HELP ${httpDurationMetricName} duration histogram of http responses labeled with: status_code, method, path\n# TYPE ${httpDurationMetricName} histogram\n${formattedMetrics}`
+  }
 }
 
 const recordMetrics = (opts: Opts) => (ctx: any) => {
@@ -102,7 +105,7 @@ const recordMetrics = (opts: Opts) => (ctx: any) => {
 
 export default (opts: Opts = {}) =>
   new Elysia()
-    // .onAfterHandle(handleRequestStart) // Unused as seemingly not needed
+    // .onAfterHandle(handleRequestStart) // Seemingly not needed
     .onRequest(handleRequestStart(opts))
     .onAfterHandle(recordMetrics(opts))
     .onError(recordMetrics(opts))

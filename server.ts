@@ -1,9 +1,9 @@
 import { Elysia } from "elysia"
-import middleware from "."
+import metricsMiddleware from "."
+
+const middlewareOptions = {}
+
 new Elysia()
-  .use(middleware())
-  .get("/", ({ body }) => "Hi")
-  .get("/error", ({ body }) => {
-    throw "You asked for it..."
-  })
+  .use(metricsMiddleware(middlewareOptions))
+  .get("/", () => "Hello world")
   .listen(8080)
