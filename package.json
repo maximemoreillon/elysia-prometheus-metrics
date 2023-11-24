@@ -1,0 +1,14 @@
+{
+  "name": "elysia-prometheus-metrics",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "elysia": "^0.7.29"
+  }
+}
