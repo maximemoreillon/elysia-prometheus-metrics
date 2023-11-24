@@ -1,10 +1,18 @@
 {
   "name": "elysia-prometheus-metrics",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "description": "ElysiaJS middleware exporting HTTP request duration metrics",
   "module": "index.ts",
   "type": "module",
   "author": "Maxime MOREILLON",
   "license": "MIT",
+  "keywords": [
+    "prometheus",
+    "metrics",
+    "express",
+    "path",
+    "method"
+  ],
   "devDependencies": {
     "bun-types": "latest"
   },
@@ -13,5 +21,9 @@
   },
   "dependencies": {
     "elysia": "^0.7.29"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maximemoreillon/elysia-prometheus-metrics"
   }
 }
