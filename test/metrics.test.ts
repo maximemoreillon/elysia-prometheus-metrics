@@ -15,7 +15,14 @@ describe("Metrics", () => {
   })
 
   describe("Path", () => {
-    it("Should contain metrics for the requested path", async () => {
+    it("Should contain metrics for the root path", async () => {
+      await app.handle(new Request("http://localhost/"))
+      const response = await app.handle(new Request("http://localhost/metrics"))
+      metrics = await response.text()
+      expect(metrics).toInclude(`path="/"`)
+    })
+
+    it("Should contain metrics for the /greetings path", async () => {
       await app.handle(new Request("http://localhost/greetings"))
       const response = await app.handle(new Request("http://localhost/metrics"))
       metrics = await response.text()
