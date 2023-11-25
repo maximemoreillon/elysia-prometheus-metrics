@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { app } from "../server"
+import { app } from "../src/server"
 
 describe("/metrics", () => {
   describe("GET /metrics", () => {
