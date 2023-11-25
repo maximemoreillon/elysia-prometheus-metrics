@@ -1,6 +1,16 @@
 stages:
+  - test
   - publish
-publish:
+
+test-job:
+  stage: test
+  tags:
+    - moreillon
+  script:
+    - bun install
+    - bun test
+
+publish-job:
   stage: publish
   tags:
     - moreillon

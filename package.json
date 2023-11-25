@@ -13,6 +13,9 @@
     "path",
     "method"
   ],
+  "scripts": {
+    "test": "mocha --timeout 10000 --exit"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },

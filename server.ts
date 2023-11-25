@@ -4,7 +4,7 @@ import { sleep } from "bun"
 
 const middlewareOptions = {}
 
-new Elysia()
+export const app = new Elysia()
   .use(metricsMiddleware(middlewareOptions))
   .get("/", () => "Root")
   .get("/greetings", () => "Hello world")
