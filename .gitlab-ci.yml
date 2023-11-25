@@ -9,7 +9,7 @@ test-job:
   image: oven/bun:1
   script:
     - bun install
-    - bun test
+    - bun test --coverage
 
 publish-job:
   stage: publish
