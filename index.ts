@@ -22,9 +22,9 @@ const codeMap: any = {
   INTERNAL_SERVER_ERROR: 500,
 }
 
-const formatParams = (paramMap: any) =>
-  Object.keys(paramMap)
-    .map((key) => `${key}="${paramMap[key]}"`)
+const formatLabels = (labelMap: any) =>
+  Object.keys(labelMap)
+    .map((key) => `${key}="${labelMap[key]}"`)
     .join(",")
 
 const handleOnRequest = (opts: Opts) => (ctx: any) => {
@@ -60,7 +60,7 @@ const recordMetrics = (opts: Opts) => (ctx: any) => {
   const { pathname: path } = new URL(url)
 
   // TODO: allow customization
-  const paramMap = { path, method, status_code }
+  const labelMap = { path, method, status_code }
 
   // Compute Histogram
   // TODO: dealing with +Inf is not very nice
@@ -77,21 +77,21 @@ const recordMetrics = (opts: Opts) => (ctx: any) => {
     .map((b) => b.toString())
     .concat("+Inf")
     .forEach((b) => {
-      const bucketMetric = `${httpDurationMetricName}_bucket{${formatParams({
+      const bucketMetric = `${httpDurationMetricName}_bucket{${formatLabels({
         le: b,
-        ...paramMap,
+        ...labelMap,
       })}}`
 
       if (!metrics[bucketMetric]) metrics[bucketMetric] = 0
       if (le === b) metrics[bucketMetric]++
     })
 
-  const sumMetric = `${httpDurationMetricName}_sum{${formatParams(paramMap)}}`
+  const sumMetric = `${httpDurationMetricName}_sum{${formatLabels(labelMap)}}`
   if (!metrics[sumMetric]) metrics[sumMetric] = latency
   else metrics[sumMetric] += latency
 
-  const countMetric = `${httpDurationMetricName}_count{${formatParams(
-    paramMap
+  const countMetric = `${httpDurationMetricName}_count{${formatLabels(
+    labelMap
   )}}`
   if (!metrics[countMetric]) metrics[countMetric] = 1
   else metrics[countMetric] += 1
