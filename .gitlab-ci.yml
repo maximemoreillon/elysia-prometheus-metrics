@@ -7,6 +7,7 @@ test-job:
   tags:
     - dind
   image: oven/bun:1
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   script:
     - bun install
     - bun test --coverage
