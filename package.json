@@ -1,7 +1,11 @@
 {
   "name": "elysia-prometheus-metrics",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "ElysiaJS middleware exporting HTTP request duration metrics",
+  "main": "src/index.ts",
+  "exports": {
+    "bun": "./src/index.ts"
+  },
   "module": "src/index.ts",
   "type": "module",
   "author": "Maxime MOREILLON",
@@ -14,8 +18,7 @@
     "method"
   ],
   "devDependencies": {
-    "bun-types": "latest",
-    "parse-prometheus-text-format": "^1.1.1"
+    "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
