@@ -23,4 +23,5 @@ publish-job:
   before_script:
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
   script:
+    - bunx tsc
     - npm publish

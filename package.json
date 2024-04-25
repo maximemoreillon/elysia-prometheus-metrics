@@ -8,6 +8,9 @@
     ".": "./dist/src/index.js"
   },
   "module": "dist/src/index.js",
+  "scripts": {
+    "dev": "bun run --hot src/server.ts"
+  },
   "type": "module",
   "author": "Maxime MOREILLON",
   "license": "MIT",
