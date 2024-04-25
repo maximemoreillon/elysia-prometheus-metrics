@@ -23,13 +23,9 @@
     "method"
   ],
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
+    "bun-types": "latest",
+    "elysia": "^0.7.29",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "elysia": "^0.7.29"
   },
   "repository": {
     "type": "git",
