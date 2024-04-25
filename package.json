@@ -2,11 +2,12 @@
   "name": "elysia-prometheus-metrics",
   "version": "1.0.13",
   "description": "ElysiaJS middleware exporting HTTP request duration metrics",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/src/index.js"
   },
-  "module": "src/index.ts",
+  "module": "dist/src/index.js",
   "type": "module",
   "author": "Maxime MOREILLON",
   "license": "MIT",

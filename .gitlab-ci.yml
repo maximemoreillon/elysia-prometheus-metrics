@@ -4,6 +4,8 @@ stages:
 
 test-job:
   stage: test
+  only:
+    - tags
   tags:
     - dind
   image: oven/bun:1
@@ -14,6 +16,8 @@ test-job:
 
 publish-job:
   stage: publish
+  only:
+    - tags
   tags:
     - moreillon
   before_script:
