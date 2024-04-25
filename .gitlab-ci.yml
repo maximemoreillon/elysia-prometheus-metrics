@@ -16,6 +16,7 @@ test-job:
 
 publish-job:
   stage: publish
+  image: oven/bun:1
   only:
     - tags
   tags:
@@ -23,6 +24,6 @@ publish-job:
   before_script:
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
   script:
-    - npm install
-    - npm run build
-    - npm publish
+    - bun install
+    - bun run build
+    - bun publish
