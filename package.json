@@ -1,6 +1,6 @@
 {
   "name": "elysia-prometheus-metrics",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "ElysiaJS middleware exporting HTTP request duration metrics",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
