@@ -9,7 +9,8 @@
   },
   "module": "dist/src/index.js",
   "scripts": {
-    "dev": "bun run --hot src/server.ts"
+    "dev": "bun run --hot src/server.ts",
+    "build": "tsc"
   },
   "type": "module",
   "author": "Maxime MOREILLON",
