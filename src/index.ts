@@ -29,7 +29,7 @@ const formatLabels = (labelMap: any) =>
 
 const handleOnRequest = (opts: Opts) => (ctx: any) => {
   // Keep track of the start time of the request
-  ctx.store.startTime = process.hrtime.bigint()
+  ctx.store.reqStartTime = process.hrtime.bigint()
 
   const { metricsPath, httpDurationMetricName } = opts
   const {
@@ -64,7 +64,7 @@ const recordMetrics = (opts: Opts) => (ctx: any) => {
 
   // Compute Histogram
   // TODO: dealing with +Inf is not very nice
-  const latency = Number(process.hrtime.bigint() - store.startTime) * 1e-9 // [s]
+  const latency = Number(process.hrtime.bigint() - store.reqStartTime) * 1e-9 // [s]
   let le = buckets
     .slice()
     .reverse()
@@ -107,6 +107,6 @@ export default (userOpts: UserOpts = {}) => {
 
   return new Elysia()
     .onRequest(handleOnRequest(opts))
-    .onAfterHandle(recordMetrics(opts))
-    .onError(recordMetrics(opts))
+    .onAfterHandle({ as: 'global' }, recordMetrics(opts))
+    .onError({ as: 'global' }, recordMetrics(opts))
 }
