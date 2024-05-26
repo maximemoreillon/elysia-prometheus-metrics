@@ -24,8 +24,8 @@
   ],
   "devDependencies": {
     "bun-types": "latest",
-    "elysia": "^0.7.29",
-    "typescript": "^5.0.0"
+    "elysia": "^1.0.21",
+    "typescript": "^5.4.5"
   },
   "repository": {
     "type": "git",
