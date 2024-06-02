@@ -1,20 +1,21 @@
 import { Elysia } from "elysia"
-import metricsMiddleware from "."
 import { sleep } from "bun"
+import metricsMiddleware from "."
 
+const port = 8080
 const middlewareOptions = {}
 
 export const app = new Elysia()
   .use(metricsMiddleware(middlewareOptions))
-  .get("/", () => "Root")
-  .get("/greetings", () => "Hello world")
-  .post("/", () => "OK")
-  .get("/error", () => {
-    throw "You asked for it"
-  })
+  .get("/", () => "GET /")
+  .post("/", () => "POST /")
+  .get("/greetings", () => "Hello")
   .get("/delay", async ({ query }) => {
     const { duration = "100" } = query
     await sleep(Number(duration))
     return "Kept you waiting huh?"
   })
-  .listen(8080)
+  .get("/error", () => {
+    throw "You asked for it"
+  })
+  .listen(port, () => console.log(`Elysia listening on port ${port}`))

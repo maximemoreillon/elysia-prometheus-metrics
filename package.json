@@ -1,20 +1,22 @@
 {
   "name": "elysia-prometheus-metrics",
   "version": "1.3.0",
-  "description": "ElysiaJS middleware exporting HTTP request duration metrics",
+  "author": "Maxime MOREILLON",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maximemoreillon/elysia-prometheus-metrics"
+  },
   "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "module": "dist/src/index.js",
+  "devDependencies": {
+    "bun-types": "latest",
+    "elysia": "^1.0.22",
+    "typescript": "^5.4.5"
+  },
   "exports": {
     ".": "./dist/src/index.js"
   },
-  "module": "dist/src/index.js",
-  "scripts": {
-    "dev": "bun run --hot src/server.ts",
-    "build": "tsc"
-  },
-  "type": "module",
-  "author": "Maxime MOREILLON",
-  "license": "MIT",
+  "description": "ElysiaJS middleware exporting HTTP request duration metrics",
   "keywords": [
     "prometheus",
     "metrics",
@@ -22,13 +24,11 @@
     "path",
     "method"
   ],
-  "devDependencies": {
-    "bun-types": "latest",
-    "elysia": "^1.0.21",
-    "typescript": "^5.4.5"
+  "license": "MIT",
+  "scripts": {
+    "dev": "bun run --hot src/server.ts",
+    "build": "tsc"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/maximemoreillon/elysia-prometheus-metrics"
-  }
+  "type": "module",
+  "types": "dist/src/index.d.ts"
 }
